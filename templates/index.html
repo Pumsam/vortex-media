@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a12">
+  <title>Vortex — Media Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Фоновые градиентные шары -->
+  <div class="aurora" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="grain"></span>
+  </div>
+
+  <div class="shell">
+    <!-- Верхняя панель -->
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Vortex">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 3C8.8 3 3 8.8 3 16s5.8 13 13 13 13-5.8 13-13S23.2 3 16 3Z" stroke="url(#g1)" stroke-width="2.2"/>
+            <path d="M16 9c-3.9 0-7 3.1-7 7s3.1 7 7 7 7-3.1 7-7" stroke="url(#g1)" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M16 13.2a2.8 2.8 0 1 0 0 5.6 2.8 2.8 0 0 0 0-5.6Z" fill="url(#g1)"/>
+            <defs><linearGradient id="g1" x1="3" y1="3" x2="29" y2="29"><stop stop-color="#8b5cf6"/><stop offset="0.5" stop-color="#d946ef"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+          </svg>
+        </span>
+        <span class="brand-name">VORTEX<span>.media</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="live-dot"></span>
+        <span>Локальный режим</span>
+        <span class="divider"></span>
+        <span class="version" id="version">v1.0</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Герой -->
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> СКАЧИВАНИЕ БЕЗ ЛИШНЕГО</div>
+        <h1>Любое видео.<br><span class="gradient-text">Максимум контроля.</span></h1>
+        <p class="subtitle">Вставь ссылку — и сразу увидь размер, качество и все доступные варианты. Без регистрации, без рекламы, без лишних кликов.</p>
+      </section>
+
+      <!-- Поле ввода -->
+      <section class="search-panel glass">
+        <div class="input-row">
+          <div class="input-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+          </div>
+          <input id="urlInput" type="text" placeholder="Вставь ссылку на видео…" autocomplete="off" spellcheck="false" aria-label="Ссылка на видео">
+          <button id="clearBtn" class="icon-btn hidden" title="Очистить" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+          <button id="pasteBtn" class="icon-btn" title="Вставить из буфера обмена" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          </button>
+          <button id="analyzeBtn" class="primary-btn" type="button">
+            <span class="btn-label">Анализ</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <div class="panel-foot">
+          <div class="chips">
+            <span class="chip-label">Работает с</span>
+            <span class="chip">TikTok</span>
+            <span class="chip">YouTube</span>
+            <span class="chip">Instagram</span>
+            <span class="chip">VK</span>
+            <span class="chip">X</span>
+            <span class="chip">Reddit</span>
+            <span class="chip more">+1000</span>
+          </div>
+          <span class="hint" id="hint">Нажми Enter или вставь ссылку для авто-анализа</span>
+        </div>
+        <div class="settings">
+          <button id="settingsToggle" class="settings-toggle" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+            Прокси и настройки
+          </button>
+          <div id="settingsPanel" class="settings-panel hidden">
+            <label for="proxyInput">Прокси (HTTP / HTTPS / SOCKS5)</label>
+            <div class="settings-row">
+              <input id="proxyInput" type="text" placeholder="http://127.0.0.1:8080 или socks5://127.0.0.1:1080" spellcheck="false">
+              <button id="saveProxy" class="save-btn" type="button">Сохранить</button>
+            </div>
+            <p class="settings-hint">Если сайт заблокирован провайдером, укажите прокси от вашего VPN. Оставьте пустым, чтобы не использовать прокси.</p>
+            <p id="cookiesStatus" class="settings-hint"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Статус: загрузка / ошибка -->
+      <div id="status" class="status hidden" role="status">
+        <div class="spinner"></div>
+        <span id="statusText">Подключаемся к сайту…</span>
+      </div>
+
+      <!-- Результат -->
+      <section id="result" class="result hidden">
+        <div class="video-card glass">
+          <div class="thumb-box">
+            <img id="thumb" alt="Превью видео">
+            <div class="thumb-shade"></div>
+            <div class="play-mark">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <span id="duration" class="duration-badge"></span>
+          </div>
+          <div class="video-info">
+            <div class="badges">
+              <span id="platform" class="platform-badge"></span>
+              <span id="typeBadge" class="soft-badge">Видео</span>
+            </div>
+            <h2 id="title"></h2>
+            <div id="videoMeta" class="meta-line"></div>
+            <p id="description" class="desc"></p>
+            <a id="openOriginal" class="open-link" href="#" target="_blank" rel="noopener">
+              Открыть оригинал
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="formats-bar">
+          <div class="formats-title">
+            <h3>Доступные форматы</h3>
+            <span id="formatCount" class="count-pill"></span>
+          </div>
+          <div class="filters" id="filters">
+            <button class="filter active" data-filter="all">Все</button>
+            <button class="filter" data-filter="av">Видео + звук</button>
+            <button class="filter" data-filter="silent">Без звука</button>
+            <button class="filter" data-filter="audio">Аудио</button>
+          </div>
+        </div>
+
+        <div id="formatList" class="format-list"></div>
+      </section>
+
+      <!-- Преимущества -->
+      <section class="features" id="features">
+        <div class="feature glass">
+          <div class="feature-icon violet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v3h16v-3"/></svg>
+          </div>
+          <h4>Размер до скачивания</h4>
+          <p>Видно точный вес каждого качества ещё до начала загрузки.</p>
+        </div>
+        <div class="feature glass">
+          <div class="feature-icon pink">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg>
+          </div>
+          <h4>Тысячи площадок</h4>
+          <p>Один движок yt-dlp поддерживает огромное число сайтов.</p>
+        </div>
+        <div class="feature glass">
+          <div class="feature-icon cyan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h4>Только локально</h4>
+          <p>Всё работает на твоём компьютере. Никаких аккаунтов и серверов.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Vortex · локальный загрузчик.Media</span>
+      <span class="footer-note">Используйте контент в соответствии с правилами площадок и законодательством.</span>
+    </footer>
+  </div>
+
+  <!-- Уведомления -->
+  <div id="toast" class="toast" role="alert"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
